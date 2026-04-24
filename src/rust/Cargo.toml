@@ -1,0 +1,23 @@
+[package]
+name = 'stacio'
+publish = false
+version = '0.1.0'
+edition = '2021'
+rust-version = '1.88'
+
+[lib]
+crate-type = [ 'rlib', 'staticlib' ]
+name = 'stacio'
+
+[[bin]]
+name = 'document'
+path = 'document.rs'
+
+[dependencies]
+extendr-api = {version = "0.9", features = [ 'serde' ] }
+stac = { version = "0.17.0", features = [ 'geo', 'geoparquet' ] }
+stac-io = { version = "0.2.8", features = [ 'geoparquet', 'store-all' ] }
+
+[profile.release]
+lto = true
+codegen-units = 1
