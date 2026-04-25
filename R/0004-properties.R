@@ -2,7 +2,6 @@ Properties <- S7::new_class(
   name = "Properties",
   properties = list(
     datetime = S7::new_property(
-      # TODO: confirm this is the right posix class
       class = NULL | S7::new_S3_class("POSIXct")
     ),
     start_datetime = S7::new_property(
@@ -18,10 +17,10 @@ Properties <- S7::new_class(
       class = NULL | S7::class_character
     ),
     created = S7::new_property(
-      class = NULL | S7::class_character
+      class = NULL | S7::new_S3_class("POSIXct")
     ),
     updated = S7::new_property(
-      class = NULL | S7::class_character
+      class = NULL | S7::new_S3_class("POSIXct")
     ),
     additional_fields = S7::new_property(
       class = S7::class_environment
@@ -40,14 +39,33 @@ Properties <- S7::new_class(
   ) {
     S7::new_object(
       S7::S7_object(),
-      datetime = datetime,
-      start_datetime = start_datetime,
-      end_datetime = end_datetime,
+      datetime = none_to_null(parse_interval(datetime)),
+      start_datetime = none_to_null(parse_interval(start_datetime)),
+      end_datetime = none_to_null(parse_interval(end_datetime)),
       title = title,
       description = description,
-      created = created,
-      updated = updated,
+      created = none_to_null(parse_interval(created)),
+      updated = none_to_null(parse_interval(updated)),
       additional_fields = list2env(list(...), additional_fields)
     )
   }
 )
+
+S7::method(print, Properties) <- function(x, ...) {
+  cli::cli_text("Properties:")
+  cli::cli_ul()
+
+  for (prp in setdiff(S7::prop_names(x), "additional_fields")) {
+    if (!is.null(S7::prop(x, prp))) {
+      cli::cli_li("{prp}: {S7::prop(x, prp)}")
+    }
+  }
+
+  if (length(ls(x@additional_fields))) {
+    cli::cli_text("And additional fields:")
+    cli::cli_li(ls(x@additional_fields))
+  }
+
+  cli::cli_end()
+  invisible(x)
+}

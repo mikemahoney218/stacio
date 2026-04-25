@@ -26,7 +26,7 @@ Link <- S7::new_class(
       class = NULL | S7::class_logical
     ),
     additional_fields = S7::new_property(
-      S7::class_environment
+      class = S7::class_environment
     )
   ),
   constructor = function(
@@ -41,6 +41,8 @@ Link <- S7::new_class(
     additional_fields = new.env(parent = emptyenv()),
     ...
   ) {
+    additional_fields <- list2env(list(...), additional_fields)
+    class(additional_fields) <- c("additional_fields", class(additional_fields))
     S7::new_object(
       S7::S7_object(),
       href = href,
@@ -51,19 +53,21 @@ Link <- S7::new_class(
       headers = headers,
       body = body,
       merge = merge,
-      additional_fields = list2env(list(...), additional_fields)
+      additional_fields = additional_fields
     )
   }
 )
 
 link_property <- S7::new_property(
-  class = S7::class_list,
+  class = S7::new_S3_class("links_list"),
   getter = function(self) {
-    lapply(
+    links <- lapply(
       rust_get_links(self@externalptr),
       do.call,
       what = Link
     )
+    class(links) <- "links_list"
+    links
   },
   validator = function(value) {
     if (
@@ -77,3 +81,40 @@ link_property <- S7::new_property(
     }
   }
 )
+
+link_msg <- function(x, ...) {
+  msg <- paste0(
+    "<stacio::Link> (rel: ",
+    x@rel,
+    ")"
+  )
+
+  if (!is.null(x@title)) {
+    msg <- paste0(
+      msg,
+      ": ",
+      x@title
+    )
+  }
+
+  if (!is.null(x@type)) {
+    msg <- paste0(
+      msg,
+      " (type: ",
+      x@type,
+      ")"
+    )
+  }
+
+  msg
+}
+
+S7::method(print, Link) <- function(x, ...) {
+  msg <- link_msg(x)
+  cat(msg)
+
+  if (length(ls(x@additional_fields))) {
+    cat("\nWith additional fields:", ls(x@additional_fields))
+  }
+  invisible(x)
+}

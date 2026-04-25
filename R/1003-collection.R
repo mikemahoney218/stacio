@@ -29,8 +29,13 @@ Collection <- S7::new_class(
       getter = function(self) rust_get_description(self@externalptr)
     ),
     keywords = S7::new_property(
-      class = S7::class_character,
-      getter = function(self) rust_get_keywords(self@externalptr)
+      class = NULL | S7::class_character,
+      getter = function(self) {
+        tryCatch(
+          rust_get_keywords(self@externalptr),
+          error = function(e) NULL
+        )
+      }
     ),
     license = S7::new_property(
       class = S7::class_character,
@@ -70,10 +75,15 @@ Collection <- S7::new_class(
         }
       }
     ),
-    # TODO: get extent
     extent = S7::new_property(
       class = Extent,
-      getter = function(self) rust_get_extent(self@externalptr)
+      getter = function(self) {
+        ext <- rust_get_extent(self@externalptr)
+        Extent(
+          spatial = lapply(ext$spatial$bbox, unlist),
+          temporal = lapply(ext$temporal$interval, parse_interval)
+        )
+      }
     ),
     summaries = S7::new_property(
       class = NULL | S7::class_environment,

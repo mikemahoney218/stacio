@@ -1,8 +1,9 @@
 Package: stacio
-Title: What the Package Does (One Line, Title Case)
+Title: Bindings to the 'STAC' Rust Crate for Reading and Writing SpatioTemporal Asset Catalog Objects
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
+    person("Michael", "Mahoney", , "mike.mahoney.218@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2402-304X"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Suggests: 
@@ -12,8 +13,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Config/rextendr/version: 0.5.0
-SystemRequirements: Cargo (Rust's package manager), rustc >= 1.65.0, xz
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.88.0, xz
 Depends: 
     R (>= 4.2)
 Imports:
+    cli,
+    glue,
+    rlang,
     S7
+URL: https://mikemahoney218.github.io/stacio/
