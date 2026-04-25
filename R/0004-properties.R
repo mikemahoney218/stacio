@@ -62,7 +62,7 @@ S7::method(print, Properties) <- function(x, ...) {
   }
 
   if (length(ls(x@additional_fields))) {
-    cli::cli_text("And additional fields:")
+    cli::cli_text("Additional fields in properties:")
     cli::cli_li(ls(x@additional_fields))
   }
 

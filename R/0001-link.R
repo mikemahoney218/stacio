@@ -59,15 +59,13 @@ Link <- S7::new_class(
 )
 
 link_property <- S7::new_property(
-  class = S7::new_S3_class("links_list"),
+  class = S7::class_list,
   getter = function(self) {
-    links <- lapply(
+    lapply(
       rust_get_links(self@externalptr),
       do.call,
       what = Link
     )
-    class(links) <- "links_list"
-    links
   },
   validator = function(value) {
     if (
@@ -82,39 +80,16 @@ link_property <- S7::new_property(
   }
 )
 
-link_msg <- function(x, ...) {
-  msg <- paste0(
-    "<stacio::Link> (rel: ",
-    x@rel,
-    ")"
+S7::method(print, Link) <- function(x, ...) {
+  cli::cli_text(
+    "{ifelse(is.null(x@title), '???', x@title)} (rel: {x@rel})"
   )
 
-  if (!is.null(x@title)) {
-    msg <- paste0(
-      msg,
-      ": ",
-      x@title
-    )
-  }
-
-  if (!is.null(x@type)) {
-    msg <- paste0(
-      msg,
-      " (type: ",
-      x@type,
-      ")"
-    )
-  }
-
-  msg
-}
-
-S7::method(print, Link) <- function(x, ...) {
-  msg <- link_msg(x)
-  cat(msg)
-
   if (length(ls(x@additional_fields))) {
-    cat("\nWith additional fields:", ls(x@additional_fields))
+    cli::cli_text("With additional fields: {ls(x@additional_fields)}")
   }
+
+  cli::cli_text("{.url {x@href}}")
+
   invisible(x)
 }
