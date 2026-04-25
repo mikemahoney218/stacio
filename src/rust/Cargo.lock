@@ -1052,9 +1052,9 @@ dependencies = [
 
 [[package]]
 name = "geo-types"
-version = "0.7.18"
+version = "0.7.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24f8647af4005fa11da47cd56252c6ef030be8fa97bdbf355e7dfb6348f0a82c"
+checksum = "94776032c45f950d30a13af6113c2ad5625316c9abfbccee4dd5a6695f8fe0f5"
 dependencies = [
  "approx",
  "num-traits",
@@ -3395,9 +3395,15 @@ dependencies = [
 name = "stacio"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "extendr-api",
+ "geo-types",
+ "geojson 1.0.0",
+ "serde",
+ "serde_json",
  "stac",
  "stac-io",
+ "wkt 0.14.0",
 ]
 
 [[package]]
@@ -4476,6 +4482,7 @@ dependencies = [
  "geo-types",
  "log",
  "num-traits",
+ "serde",
  "thiserror 1.0.69",
 ]
 

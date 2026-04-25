@@ -12,7 +12,7 @@ rust_read_stac <- function(file) .Call(wrap__rust_read_stac, file)
 #' @param value The Value to get the type of
 #'
 #' @return An external pointer
-get_stac_type <- function(value) .Call(wrap__get_stac_type, value)
+rust_get_type_name <- function(value) .Call(wrap__rust_get_type_name, value)
 
 rust_get_links <- function(value) .Call(wrap__rust_get_links, value)
 
@@ -34,32 +34,20 @@ rust_get_bbox <- function(value) .Call(wrap__rust_get_bbox, value)
 
 rust_get_collection <- function(value) .Call(wrap__rust_get_collection, value)
 
-StacObject <- new.env(parent = emptyenv())
+rust_get_geometry <- function(value) .Call(wrap__rust_get_geometry, value)
 
-StacObject$rust_clone_pointer <- function() .Call(wrap__StacObject__rust_clone_pointer, self)
+rust_get_title <- function(value) .Call(wrap__rust_get_title, value)
 
-StacObject$rust_get_links <- function() .Call(wrap__StacObject__rust_get_links, self)
+rust_get_description <- function(value) .Call(wrap__rust_get_description, value)
 
-StacObject$rust_get_version <- function() .Call(wrap__StacObject__rust_get_version, self)
+rust_get_keywords <- function(value) .Call(wrap__rust_get_keywords, value)
 
-StacObject$rust_get_extensions <- function() .Call(wrap__StacObject__rust_get_extensions, self)
+rust_get_license <- function(value) .Call(wrap__rust_get_license, value)
 
-StacObject$rust_get_id <- function() .Call(wrap__StacObject__rust_get_id, self)
+rust_get_providers <- function(value) .Call(wrap__rust_get_providers, value)
 
-StacObject$rust_get_properties <- function() .Call(wrap__StacObject__rust_get_properties, self)
+rust_get_summaries <- function(value) .Call(wrap__rust_get_summaries, value)
 
-StacObject$rust_get_assets <- function() .Call(wrap__StacObject__rust_get_assets, self)
-
-StacObject$rust_get_additional_fields <- function() .Call(wrap__StacObject__rust_get_additional_fields, self)
-
-StacObject$rust_get_bbox <- function() .Call(wrap__StacObject__rust_get_bbox, self)
-
-StacObject$rust_get_collection <- function() .Call(wrap__StacObject__rust_get_collection, self)
-
-#' @export
-`$.StacObject` <- function (self, name) { func <- StacObject[[name]]; environment(func) <- environment(); func }
-
-#' @export
-`[[.StacObject` <- `$.StacObject`
+rust_get_extent <- function(value) .Call(wrap__rust_get_extent, value)
 
 # nolint end

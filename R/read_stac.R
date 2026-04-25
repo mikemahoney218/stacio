@@ -3,19 +3,19 @@
 read_stac <- function(file) {
   val <- rust_read_stac(file)
   switch(
-    get_stac_type(val),
+    rust_get_type_name(val),
     "Catalog" = {
-      val
+      Catalog(externalptr = val)
     },
     "Collection" = {
-      val
+      Collection(externalptr = val)
     },
     "ItemCollection" = {
-      val
+      ItemCollection(externalptr = val)
     },
     "Item" = {
       Item(externalptr = val)
     },
-    rlang::abort("Unrecognized STAC object type")
+    stop("Unrecognized STAC object type")
   )
 }
